@@ -225,30 +225,30 @@ export default function CheckinPage() {
 
   // ── 出勤前：出勤フォーム ──────────────
   if (status === "before") {
-    function addTask() {
+    const addTask = () => {
       if (tasks.length >= 3) return;
       const remaining = TASK_CATEGORIES.filter((c) => !selectedCategories.includes(c));
       if (remaining.length === 0) return;
       setTasks([...tasks, { category: remaining[0], targetValue: 5, unit: "件", actualValue: 0, note: "" }]);
-    }
+    };
 
-    function updateTask(i: number, t: TaskItem) {
+    const updateTask = (i: number, t: TaskItem) => {
       const next = [...tasks];
       next[i] = t;
       setTasks(next);
-    }
+    };
 
-    function removeTask(i: number) {
+    const removeTask = (i: number) => {
       setTasks(tasks.filter((_, idx) => idx !== i));
-    }
+    };
 
-    function handleCheckin(e: React.FormEvent) {
+    const handleCheckin = (e: React.FormEvent) => {
       e.preventDefault();
       if (tasks.length === 0) { setCheckinErr("業務を1つ以上選択してください"); return; }
       if (tasks.some((t) => t.targetValue <= 0)) { setCheckinErr("目標値は1以上にしてください"); return; }
       checkin(tasks);
       router.push("/dashboard");
-    }
+    };
 
     return (
       <div className="flex flex-col gap-4 animate-fadeIn">
@@ -302,13 +302,13 @@ export default function CheckinPage() {
   }
 
   // ── 勤務中：退勤フォーム ──────────────
-  function updateCheckoutTask(i: number, t: TaskItem) {
+  const updateCheckoutTask = (i: number, t: TaskItem) => {
     const next = [...checkoutTasks];
     next[i] = t;
     setCheckoutTasks(next);
-  }
+  };
 
-  function handleCheckout(e: React.FormEvent) {
+  const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
     if (checkoutTasks.some((t) => t.actualValue < 0)) {
       setCheckoutErr("実績値は0以上にしてください");
@@ -316,7 +316,7 @@ export default function CheckinPage() {
     }
     checkout({ tasks: checkoutTasks, reflection });
     router.push("/dashboard");
-  }
+  };
 
   // 全体達成率
   const overallRate = checkoutTasks.length > 0
